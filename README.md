@@ -5,7 +5,9 @@ Para roda a solução é necessário o gerenciador de dependências **NPM**  e o
 
 
 ## Instalando as Dependências
-Após baixar o conteúdo dos dois repositórios, é necessário utilizar o comando, nas duas pastas (de cada repositório) 
+Após baixar o conteúdo dos dois repositórios:  [Back-Concorrencia e Conectividade Problema 1](https://github.com/Kadozo/Back-Concorrencia_e_Conectividade_Problema-1.git) e [Front-Concorrencia e Conectividade Problema 1](https://github.com/Kadozo/Front-Concorrencia_e_Conectividade_Problema-1.git)
+
+É necessário utilizar o comando, nas duas pastas raízes (de cada repositório) 
 
 >npm install
  
