@@ -2,7 +2,7 @@ const net = require("net");
 const randomName = require("node-random-name");
 function start(name) {
   const socket = new net.Socket(); //Criando o objeto Socket
-  socket.connect(8000, "127.0.0.1", () => {
+  socket.connect(8000, "26.91.70.227", () => {
     //Conectando o Socket ao Servidor
     console.log("Conectado ao servidor!");
     // a Cada 10000 ms (10 segundos) o socket enviará os dados
@@ -18,7 +18,7 @@ function start(name) {
 
   socket.on("error", () => {
     console.log("Erro no Servidor");
-    setTimeout(() => socket.connect(8000, "127.0.0.1"), 5000);
+    setTimeout(() => socket.connect(8000, "26.91.70.227"), 5000);
   });
 
   function valoresSensores(name) {
