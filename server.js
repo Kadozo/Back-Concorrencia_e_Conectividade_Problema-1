@@ -46,7 +46,7 @@ const server = net.createServer((socket) => {
   });
 });
 
-server.listen(8000, "127.0.0.1"); //servidor escutando na porta 8000 (para receber as informações dos pacientes)
+server.listen(8000, "26.91.70.227"); //servidor escutando na porta 8000 (para receber as informações dos pacientes)
 
 //criando um server http para as requisições da interface
 http
