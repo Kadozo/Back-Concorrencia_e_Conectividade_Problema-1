@@ -1,5 +1,48 @@
+//IMPORTANDO AS BIBLIOTECAS
+const express = require("express");
 const net = require("net");
 const http = require("http");
+const cors = require("cors");
+
+//CONSTANTES DE ENDEREÇO
+const _PORT = 8080;
+const _IP = "127.0.0.1";
+
+//DECLARAÇÃO DE VARIÁVEIS
+const app = express();
+app.use(express.json());
+app.use(cors());
+//---------------------------------------------------
+
+//DECLARANDO AS ROTAS
+app.get("/patients", (req, res) => {
+  console.log(pacientes.length);
+  return res.json(pacientes);
+});
+
+app.post("/filter", (req, res) => {
+  amount = req.body.amount;
+
+  return res.json({ message: "Quantidade alterada para " + amount });
+});
+
+app.post("/fixedPatient", (req, res) => {
+  let fixado;
+  pacientes.map((paciente) => {
+    //procura o index do paciente que terá os dados atualizados
+    if (req.body.name == paciente.name) {
+      fixado = paciente;
+      return res.json(fixado);
+    }
+  });
+});
+//-------------------------------------------------------------------------------------------------------------
+
+//INICIANDO SERVIDOR HTTP
+
+app.listen(_PORT, _IP, () => {
+  console.log("Servidor Iniciado em " + "http://" + _IP + ":" + _PORT + "/");
+});
 
 //Array que armazenará todo os pacientes e seus dados
 let pacientes = [];
@@ -17,6 +60,7 @@ const server = net.createServer((socket) => {
 
   //função que será executada no momento que o servidor receber o dado
   socket.on("data", (message) => {
+    console.log(pacientes.length);
     message = verifySituation(JSON.parse(message)); // verifica se o paciente está estável ou grave
     let match = null;
     //percorre o array de pacientes para saber se deve atualizar ou criar um novo registro
@@ -46,36 +90,32 @@ const server = net.createServer((socket) => {
   });
 });
 
-server.listen(8000, "26.91.70.227"); //servidor escutando na porta 8000 (para receber as informações dos pacientes)
-
-//criando um server http para as requisições da interface
-http
-  .createServer((req, res) => {
-    if (req.method == "GET") {
-      //se o método for GET
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      }); // escreve o Header
-      res.statusCode = 200; // atualiza o status para 200
-
-      res.end(JSON.stringify(pacientes)); //envia o array de paciente em formato string JSON
-    }
-  })
-  .listen(8080); // servidor http escutando na porta 8080
+server.listen(8000, "localhost"); //servidor escutando na porta 8000 (para receber as informações dos pacientes)
 
 function verifySituation(paciente) {
-  if (
-    (paciente.freqCorp > 38 &&
-      paciente.freqResp > 20 &&
-      paciente.freqCard > 110 &&
-      paciente.presArt < 72) ||
-    paciente.oxigen < 92
-  ) {
+  i = 0;
+  if (paciente.tempCorp > 38) {
+    i++;
+  }
+  if (paciente.freqResp > 20) {
+    i++;
+  }
+  if (paciente.freqCard > 110) {
+    i++;
+  }
+  if (paciente.presArt < 72) {
+    i++;
+  }
+  if (paciente.oxigen < 92) {
+    i += 3;
+  }
+
+  if (i >= 3) {
     paciente.situation = "Grave";
   } else {
     paciente.situation = "Estável";
   }
+  paciente.priority = i;
 
   return paciente;
 }
